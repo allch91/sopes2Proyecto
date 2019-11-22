@@ -23,7 +23,6 @@ int main()
 
     FILE *fp;
 
-
     if (fd < 0)
     {
         perror("inotify_init");
@@ -47,47 +46,59 @@ int main()
                 {
                     if (event->mask & IN_ISDIR)
                     {
+                        fp = fopen("/home/abner/log.txt", "a");
+                        fprintf(fp, "> Creación de Carpeta '%s' || %s", event->name, asctime(tm));
+                        fclose(fp);
+
                         printf("New directory %s created.\n", event->name);
                         printf("%s", asctime(tm));
                     }
                     else
                     {
-                        fp = fopen("/home/abner/log", "a");
-                        fprintf(fp, "> Creación de archivo '%s' -> %s", event->name, asctime(tm));
+                        fp = fopen("/home/abner/log.txt", "a");
+                        fprintf(fp, "> Creación de Archivo '%s' || %s", event->name, asctime(tm));
                         fclose(fp);
 
                         printf("New file %s created.\n", event->name);
                         printf("%s", asctime(tm));
-                        
                     }
                 }
                 else if (event->mask & IN_DELETE)
                 {
                     if (event->mask & IN_ISDIR)
                     {
+                        fp = fopen("/home/abner/log.txt", "a");
+                        fprintf(fp, "> Eliminación de Carpeta '%s' || %s", event->name, asctime(tm));
+                        fclose(fp);
+
                         printf("Directory %s deleted.\n", event->name);
                         printf("%s", asctime(tm));
                     }
                     else
                     {
                         fp = fopen("/home/abner/log", "a");
-                        fprintf(fp, "> Eliminación de archivo '%s' -> %s", event->name, asctime(tm));
+                        fprintf(fp, "> Eliminación de Archivo '%s' || %s", event->name, asctime(tm));
                         fclose(fp);
+
                         printf("File %s deleted.\n", event->name);
                         printf("%s", asctime(tm));
                     }
                 }
                 else if (event->mask & IN_MODIFY)
                 {
-                    if(event->mask & IN_ISDIR)
+                    if (event->mask & IN_ISDIR)
                     {
+                        fp = fopen("/home/abner/log.txt", "a");
+                        fprintf(fp, "> Modificación de Carpeta '%s' || %s", event->name, asctime(tm));
+                        fclose(fp);
+
                         printf("Directory %s modified.\n", event->name);
                         printf("%s", asctime(tm));
                     }
                     else
                     {
                         fp = fopen("/home/abner/log", "a");
-                        fprintf(fp, "> Modificación de archivo '%s' -> %s", event->name, asctime(tm));
+                        fprintf(fp, "> Modificación de Archivo '%s' -> %s", event->name, asctime(tm));
                         fclose(fp);
                         printf("File %s modified.\n", event->name);
                         printf("%s", asctime(tm));
