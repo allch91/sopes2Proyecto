@@ -21,6 +21,9 @@ int main()
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
 
+    FILE *fp;
+
+
     if (fd < 0)
     {
         perror("inotify_init");
@@ -49,8 +52,13 @@ int main()
                     }
                     else
                     {
+                        fp = fopen("/home/abner/log", "a");
+                        fprintf(fp, "> Creación de archivo '%s' -> %s", event->name, asctime(tm));
+                        fclose(fp);
+
                         printf("New file %s created.\n", event->name);
                         printf("%s", asctime(tm));
+                        
                     }
                 }
                 else if (event->mask & IN_DELETE)
@@ -62,6 +70,9 @@ int main()
                     }
                     else
                     {
+                        fp = fopen("/home/abner/log", "a");
+                        fprintf(fp, "> Eliminación de archivo '%s' -> %s", event->name, asctime(tm));
+                        fclose(fp);
                         printf("File %s deleted.\n", event->name);
                         printf("%s", asctime(tm));
                     }
@@ -75,6 +86,9 @@ int main()
                     }
                     else
                     {
+                        fp = fopen("/home/abner/log", "a");
+                        fprintf(fp, "> Modificación de archivo '%s' -> %s", event->name, asctime(tm));
+                        fclose(fp);
                         printf("File %s modified.\n", event->name);
                         printf("%s", asctime(tm));
                     }
